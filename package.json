@@ -1,0 +1,18 @@
+{
+  "name": "ptest",
+  "version": "1.0.0",
+  "description": "A super-simple test framework for promises *only*.",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "standard",
+    "test": "node test"
+  },
+  "author": "Bryan English <bryan@bryanenglish.com>",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^3.3.1"
+  },
+  "devDependencies": {
+    "standard": "^5.1.0"
+  }
+}
