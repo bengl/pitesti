@@ -1,6 +1,6 @@
-# PTEST
+# PITESTI
 
-**`ptest`** is a tiny test framework for promises *only*. It's only been
+**`pitesti`** is a tiny test framework for promises *only*. It's only been
 tested on iojs 3.x, so YMMV on earlier versions of node/iojs.
 
 ## GOALS
@@ -18,10 +18,10 @@ tested on iojs 3.x, so YMMV on earlier versions of node/iojs.
 First, create a test suite.
 
 ```js
-let test = require('ptest')()
+let test = require('pitesti')()
 ```
 
-`ptest` exports a single function which creates test suites. It takes in an
+`pitesti` exports a single function which creates test suites. It takes in an
 options object (or nothing) with the following values:
 
 * `outputStream`: where to write TAP output. Default is `process.stdout`.
@@ -31,7 +31,7 @@ options object (or nothing) with the following values:
 Now you can write some tests and run them.
 
 ```js
-let test = require('ptest')()
+let test = require('pitesti')()
 
 // any function returning a promise can be a test
 test('foo example test 1', function(){

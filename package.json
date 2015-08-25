@@ -1,5 +1,5 @@
 {
-  "name": "ptest",
+  "name": "pitesti",
   "version": "1.0.0",
   "description": "A super-simple test framework for promises *only*.",
   "main": "index.js",

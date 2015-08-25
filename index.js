@@ -8,7 +8,7 @@ See LICENSE.txt
 
 const yaml = require('js-yaml')
 
-class PTestSuite {
+class PitestiSuite {
   constructor (opts) {
     opts = opts || {}
     this.tests = []
@@ -112,13 +112,13 @@ class PTestSuite {
     this.out.write('#\n')
     this.logErrorDiag(err)
     this.out.write('#\n')
-    this.out.write('Bail out! Internal ptest error, see above.\n')
+    this.out.write('Bail out! Internal pitesti error, see above.\n')
     this.finisher(2)
   }
 }
 
 module.exports = function (opts) {
-  let suite = new PTestSuite(opts)
+  let suite = new PitestiSuite(opts)
   let test = function (name, t) {
     if (arguments.length === 0) {
       suite.printPreamble()
