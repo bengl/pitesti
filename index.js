@@ -6,8 +6,12 @@ See LICENSE.txt
 
 'use strict'
 
-const yaml = require('js-yaml')
 const makeTap = require('make-tap-output')
+
+const isFunc = f => typeof f === 'function'
+const isNum = n => typeof n === 'number'
+const isPromise = p => isFunc(p.then)
+const promisify = f => Promise.resolve().then(f)
 
 class PitestiSuite {
   constructor (opts) {
@@ -25,44 +29,31 @@ class PitestiSuite {
 
   test (name, fnOrP) {
     this.testNames.push(name)
-    this.tests.push(fnOrP ? function () {
-      return (
-        typeof fnOrP === 'function' && typeof fnOrP.then !== 'function' ?
-        Promise.resolve().then(fnOrP) :
-        (typeof fnOrP.then === 'function' ? fnOrP : null)
-      )
-    } : null)
+    this.tests.push(fnOrP ? () =>
+      isPromise(fnOrP) ? fnOrP : (isFunc(fnOrP) ? promisify(fnOrP) : null)
+    : null)
   }
 
   runTest (i) {
     if (i === this.tests.length) {
       return this.finisher(this.exitCode)
     }
-    let resultObj = {
-      id: i,
-      name: this.testNames[i],
-      pass: true
-    }
-    if (!this.tests[i] || (typeof this.onlyTest === 'number' && this.onlyTest !== i)) {
-      resultObj.skip = true
-      this.printResult(resultObj)
+    const name = this.testNames[i]
+    if (!this.tests[i] || (isNum(this.onlyTest) && this.onlyTest !== i)) {
+      this.tap.pass(name, 'SKIP')
       return this.runTest(++i)
     }
     this.tests[i]()
     .then(
-      () => this.printResult(resultObj),
-      err => this.printFailResult(resultObj, err)
+      () => this.tap.pass(name),
+      err => {
+        this.exitCode = 1
+        this.tap.fail(name, typeof err === 'string' ? {message: err} : err)
+      }
     )
     .then(() => this.runTest(++i))
     .catch(e => this.bailOut(e))
     // ^ Should only get here if there's an error in our code.
-  }
-
-  printFailResult (resultObj, err) {
-    this.exitCode = 1
-    resultObj.pass = false
-    resultObj.reason = err
-    this.printResult(resultObj)
   }
 
   skip (name) {
@@ -75,56 +66,28 @@ class PitestiSuite {
     this.test(name, t)
   }
 
-  printPreamble () {
-    // this.out.write('TAP version 13\n')
+  plan () {
     this.tap.plan(this.tests.length)
-    // this.out.write('1..' + this.tests.length + '\n')
-  }
-
-  printResult (result) {
-    this.out.write(result.pass ? 'ok' : 'not ok')
-    this.out.write(' ' + (result.id + 1) + ' ' + result.name)
-    if (result.skip) {
-      this.out.write(' # SKIP')
-    }
-    this.out.write('\n')
-    if (!result.pass) {
-      this.logErrorDiag(result.reason)
-    }
-  }
-
-  logErrorDiag (err) {
-    this.out.write('  ---\n')
-    this.out.write(yaml.safeDump({
-      error: err && err.stack || err
-    }).split('\n').map(line => '  ' + line).join('\n'))
-    this.out.write('\n  ...\n')
   }
 
   bailOut (err) {
-    this.out.write('#\n')
-    this.logErrorDiag(err)
-    this.out.write('#\n')
-    this.out.write('Bail out! Internal pitesti error, see above.\n')
+    this.out.write(err.stack)
+    this.out.write('\n\nBail out! Internal pitesti error, see above.\n')
     this.finisher(2)
   }
 }
 
 module.exports = function (opts) {
-  let suite = new PitestiSuite(opts)
-  let test = function (name, t) {
+  const suite = new PitestiSuite(opts)
+  const test = function (name, t) {
     if (arguments.length === 0) {
-      suite.printPreamble()
+      suite.plan()
       suite.runTest(0)
       return
     }
     suite.test(name, t)
   }
-  test.only = function (name, t) {
-    suite.only(name, t)
-  }
-  test.skip = function (name) {
-    suite.skip(name)
-  }
+  test.only = (name, t) => suite.only(name, t)
+  test.skip = (name) => suite.skip(name)
   return test
 }

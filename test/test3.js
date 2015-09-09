@@ -2,11 +2,12 @@
 
 const assert = require('assert')
 
-let fakeStream = {
-  buff: '',
-  write: function (data) {
-    this.buff += data
-  }
+let fakeStream = new (require('stream').Writable)()
+
+fakeStream.buff = ''
+fakeStream._write = function (chunk, enc, next) {
+  this.buff += chunk.toString()
+  next()
 }
 
 let testOutput = `

@@ -11,7 +11,7 @@ function runTests () {
   let suite = files.shift()
   if (/\.js$/.test(suite)) {
     try {
-      require(require('path').join(__dirname, 'test', suite))(runTests)
+      require(require('path').join(__dirname, 'test', suite))(() => setImmediate(runTests))
     } catch (e) {
       console.error(e.stack)
       process.exit(1)

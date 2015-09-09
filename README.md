@@ -1,7 +1,7 @@
 # PITESTI
 
 **`pitesti`** is a tiny test framework for promises *only*. It's only been
-tested on iojs 3.x, so YMMV on earlier versions of node/iojs.
+tested on node v4.0.0, so YMMV on earlier versions of node/iojs.
 
 ## GOALS
 
@@ -11,7 +11,7 @@ tested on iojs 3.x, so YMMV on earlier versions of node/iojs.
 * Reject for fail, fulfill for pass.
 * Super-simple test definition format.
 * No setup or teardown functions.
-* Only care about node version >= 3.
+* Only care about node version >= 4.
 
 ## USAGE
 
@@ -61,7 +61,9 @@ TAP version 13
 ok 1 foo example 1
 not ok 2 foo example 2
   ---
-  error: |-
+  name: Error
+  message: bad
+  stack: |-
     Error: bad
       <stacktrace line 1>
       <stacktrace line 2>

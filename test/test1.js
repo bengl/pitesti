@@ -2,11 +2,12 @@
 
 const assert = require('assert')
 
-let fakeStream = {
-  buff: '',
-  write: function (data) {
-    this.buff += data
-  }
+let fakeStream = new (require('stream').Writable)()
+
+fakeStream.buff = ''
+fakeStream._write = function (chunk, enc, next) {
+  this.buff += chunk.toString()
+  next()
 }
 
 let testOutput = `
@@ -15,24 +16,24 @@ TAP version 13
 ok 1 foo example 1
 not ok 2 foo example 2
   ---
-  error: this is a stack
+  stack: this is a stack
 
   ...
 ok 3 foo example 3 # SKIP
 ok 4 foo example 4
 not ok 5 foo example 5
   ---
-  error: rejected string
+  message: rejected string
 
   ...
 not ok 6 foo example 6
   ---
-  error: this is a stack that is thrown
+  stack: this is a stack that is thrown
 
   ...
 ok 7 foo example 7
 ok 8 foo example 8 # SKIP
-`.replace(/\n\n/g, '\n  \n')
+`
 
 module.exports = function (cb) {
   let test = require('../index')({
