@@ -7,6 +7,7 @@ See LICENSE.txt
 'use strict'
 
 const yaml = require('js-yaml')
+const makeTap = require('make-tap-output')
 
 class PitestiSuite {
   constructor (opts) {
@@ -18,57 +19,50 @@ class PitestiSuite {
     this.exitCode = 0
     this.finisher = opts.done || process.exit
     this.out = opts.outputStream || process.stdout
+    this.tap = makeTap()
+    this.tap.pipe(this.out)
   }
 
   test (name, fnOrP) {
     this.testNames.push(name)
-    if (!fnOrP) {
-      this.tests.push(null)
-      return
-    }
-    this.tests.push(function () {
+    this.tests.push(fnOrP ? function () {
       return (
-      typeof fnOrP === 'function' && typeof fnOrP.then !== 'function' ?
+        typeof fnOrP === 'function' && typeof fnOrP.then !== 'function' ?
         Promise.resolve().then(fnOrP) :
         (typeof fnOrP.then === 'function' ? fnOrP : null)
       )
-    })
+    } : null)
   }
 
   runTest (i) {
     if (i === this.tests.length) {
       return this.finisher(this.exitCode)
     }
+    let resultObj = {
+      id: i,
+      name: this.testNames[i],
+      pass: true
+    }
     if (!this.tests[i] || (typeof this.onlyTest === 'number' && this.onlyTest !== i)) {
-      this.printResult({
-        id: i,
-        name: this.testNames[i],
-        pass: true,
-        skip: true
-      })
+      resultObj.skip = true
+      this.printResult(resultObj)
       return this.runTest(++i)
     }
-    let self = this
-    this.tests[i]().then(function () {
-      self.printResult({
-        id: i,
-        name: self.testNames[i],
-        pass: true
-      })
-    }, function (err) {
-      self.exitCode = 1
-      self.printResult({
-        id: i,
-        name: self.testNames[i],
-        pass: false,
-        reason: err
-      })
-    }).then(function () {
-      self.runTest(++i)
-    }).catch(function (e) {
-      // Should only get here if there's an error in our code.
-      self.bailOut(e)
-    })
+    this.tests[i]()
+    .then(
+      () => this.printResult(resultObj),
+      err => this.printFailResult(resultObj, err)
+    )
+    .then(() => this.runTest(++i))
+    .catch(e => this.bailOut(e))
+    // ^ Should only get here if there's an error in our code.
+  }
+
+  printFailResult (resultObj, err) {
+    this.exitCode = 1
+    resultObj.pass = false
+    resultObj.reason = err
+    this.printResult(resultObj)
   }
 
   skip (name) {
@@ -82,8 +76,9 @@ class PitestiSuite {
   }
 
   printPreamble () {
-    this.out.write('TAP version 13\n')
-    this.out.write('1..' + this.tests.length + '\n')
+    // this.out.write('TAP version 13\n')
+    this.tap.plan(this.tests.length)
+    // this.out.write('1..' + this.tests.length + '\n')
   }
 
   printResult (result) {
@@ -102,9 +97,7 @@ class PitestiSuite {
     this.out.write('  ---\n')
     this.out.write(yaml.safeDump({
       error: err && err.stack || err
-    }).split('\n').map(function (line) {
-      return '  ' + line
-    }).join('\n'))
+    }).split('\n').map(line => '  ' + line).join('\n'))
     this.out.write('\n  ...\n')
   }
 

@@ -10,7 +10,8 @@
   "author": "Bryan English <bryan@bryanenglish.com>",
   "license": "MIT",
   "dependencies": {
-    "js-yaml": "^3.3.1"
+    "js-yaml": "^3.3.1",
+    "make-tap-output": "^1.0.0"
   },
   "devDependencies": {
     "standard": "^5.1.0"
