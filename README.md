@@ -48,7 +48,7 @@ let myPromise = Promise.resolve()
 test('foo example test 3', myPromise)
 
 // this starts running the suite
-test.run()
+test()
 ```
 
 This will run the tests, outputting to the `outputStream`, and when done will
