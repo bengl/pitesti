@@ -80,6 +80,15 @@ ok 3 foo example 4
 Since one of the tests failed, the exit code is 1, rather than the 0 we'd get in
 a 100% success case.
 
+### Assertions
+
+You can use whatever assertion library you want, provided that you still return
+a Promise whose end-result passes or fails the test.
+
+Because of the Promise-only nature of this framework, [chai-as-promised](https://www.npmjs.com/package/chai-as-promised)
+and [promise-assert](https://www.npmjs.com/package/promise-assert) are good
+suggestions.
+
 ### Skip and Only
 
 You can skip or isolate a test the same way you would in Mocha. The template
