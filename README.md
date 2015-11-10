@@ -47,6 +47,9 @@ test('foo example test 2', function(){
 let myPromise = Promise.resolve()
 test('foo example test 3', myPromise)
 
+// you can call test as a template literal, for a fun DSL
+test `foo example test 4` (() => Promise.resolve('good'))
+
 // this starts running the suite
 test()
 ```
@@ -71,6 +74,7 @@ not ok 2 foo example 2
       <...>
   ...
 ok 3 foo example 3
+ok 3 foo example 4
 ```
 
 Since one of the tests failed, the exit code is 1, rather than the 0 we'd get in
@@ -78,7 +82,8 @@ a 100% success case.
 
 ### Skip and Only
 
-You can skip or isolate a test the same way you would in Mocha.
+You can skip or isolate a test the same way you would in Mocha. The template
+literal forms work as with just `test`.
 
 ```js
 test.only('only this test will run', function(){

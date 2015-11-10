@@ -38,10 +38,10 @@ module.exports = function (cb) {
     }
   })
 
-  test.skip('bar example 1', Promise.resolve())
+  test.skip`bar example 1`(Promise.resolve())
   test('bar example 2', Promise.resolve())
   test.only('bar example 3', Promise.resolve())
-  test.only('bar example 4', Promise.resolve())
+  test.only`bar example 4`(Promise.resolve())
   test('bar example 5', Promise.resolve())
 
   console.log('#\n# test `only`\n#')

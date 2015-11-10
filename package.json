@@ -4,7 +4,7 @@
   "description": "A super-simple test framework for promises *only*.",
   "main": "index.js",
   "scripts": {
-    "pretest": "standard",
+    "posttest": "standard",
     "test": "node test"
   },
   "author": "Bryan English <bryan@bryanenglish.com>",

@@ -63,7 +63,7 @@ module.exports = function (cb) {
     return Promise.resolve()
   })
   test('foo example 4', Promise.resolve())
-  test('foo example 5', Promise.reject('rejected string'))
+  test `foo example 5`(Promise.reject('rejected string'))
   test('foo example 6', function () {
     let err = {stack: 'this is a stack that is thrown'}
     throw err

@@ -77,17 +77,36 @@ class PitestiSuite {
   }
 }
 
+function templateWrap (func) {
+  let orig = PitestiSuite.prototype[func]
+  PitestiSuite.prototype[func] = function () {
+    if (Array.isArray(arguments[0])) {
+      return (fn) => orig.call(
+        this,
+        String.raw(arguments[0], Array.prototype.slice.call(arguments, 1)),
+        fn
+      )
+    } else {
+      return orig.apply(this, arguments)
+    }
+  }
+}
+
+templateWrap('test')
+templateWrap('only')
+templateWrap('skip')
+
 module.exports = function (opts) {
   const suite = new PitestiSuite(opts)
-  const test = function (name, t) {
+  const test = function () {
     if (arguments.length === 0) {
       suite.plan()
       suite.runTest(0)
       return
     }
-    suite.test(name, t)
+    return suite.test.apply(suite, arguments)
   }
-  test.only = (name, t) => suite.only(name, t)
-  test.skip = (name) => suite.skip(name)
+  test.only = function () { return suite.only.apply(suite, arguments) }
+  test.skip = function () { return suite.skip.apply(suite, arguments) }
   return test
 }
