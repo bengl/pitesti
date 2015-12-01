@@ -97,9 +97,14 @@ templateWrap('only')
 templateWrap('skip')
 
 module.exports = function (opts) {
+  let testStarted = false
   const suite = new PitestiSuite(opts)
   const test = function () {
+    if (testStarted) {
+      return
+    }
     if (arguments.length === 0) {
+      testStarted = true
       suite.plan()
       suite.runTest(0)
       return
