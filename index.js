@@ -19,10 +19,15 @@ class PitestiSuite {
     this.tests = []
     this.testNames = []
     this.skips = {}
+    this.totalSkips = 0
+    this.totalPasses = 0
+    this.totalFails = 0
+    this.totalTests = 0
     this.onlyTest = null
     this.exitCode = 0
     this.finisher = opts.done || process.exit
     this.out = opts.outputStream || process.stdout
+    this.summary = opts.summary === undefined ? true : opts.summary
     this.tap = makeTap()
     this.tap.pipe(this.out)
   }
@@ -36,18 +41,33 @@ class PitestiSuite {
 
   runTest (i) {
     if (i === this.tests.length) {
+      if (this.summary) {
+        this.out.write('\n')
+        this.tap.diag(`tests ${this.totalTests}`)
+        this.tap.diag(`pass  ${this.totalPasses}`)
+        this.tap.diag(`fail  ${this.totalFails}`)
+        if (this.totalSkips > 0) {
+          this.tap.diag(`skip  ${this.totalSkips}`)
+        }
+      }
       return this.finisher(this.exitCode)
     }
+    this.totalTests++
     const name = this.testNames[i]
     if (!this.tests[i] || (isNum(this.onlyTest) && this.onlyTest !== i)) {
       this.tap.pass(name, 'SKIP')
+      this.totalSkips++
       return this.runTest(++i)
     }
     this.tests[i]()
     .then(
-      () => this.tap.pass(name),
+      () => {
+        this.totalPasses++
+        this.tap.pass(name)
+      },
       err => {
         this.exitCode = 1
+        this.totalFails++
         this.tap.fail(name, typeof err === 'string' ? {message: err} : err)
       }
     )

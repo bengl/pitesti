@@ -18,6 +18,11 @@ ok 2 bar example 2 # SKIP
 ok 3 bar example 3 # SKIP
 ok 4 bar example 4
 ok 5 bar example 5 # SKIP
+
+# tests 5
+# pass  1
+# fail  0
+# skip  4
 `
 
 module.exports = function (cb) {

@@ -25,6 +25,8 @@ let test = require('pitesti')()
 options object (or nothing) with the following values:
 
 * `outputStream`: where to write TAP output. Default is `process.stdout`.
+* `summary`: whether or not to write a summary to the `outputStream` and the end
+of testing. Default is `true`.
 * `done`: a callback function that will take in an exit code. Default is
 `process.exit`.
 

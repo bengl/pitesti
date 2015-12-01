@@ -19,6 +19,7 @@ ok 1 outer test
 module.exports = function (cb) {
   let test = require('../index')({
     outputStream: fakeStream,
+    summary: false,
     done: function (code) {
       try {
         console.log(fakeStream.buff.trim())

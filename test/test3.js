@@ -15,6 +15,10 @@ TAP version 13
 1..2
 ok 1 bar example 1
 ok 2 bar example 2
+
+# tests 2
+# pass  2
+# fail  0
 `
 
 module.exports = function (cb) {

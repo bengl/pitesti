@@ -33,6 +33,11 @@ not ok 6 foo example 6
   ...
 ok 7 foo example 7
 ok 8 foo example 8 # SKIP
+
+# tests 8
+# pass  3
+# fail  3
+# skip  2
 `
 
 module.exports = function (cb) {
