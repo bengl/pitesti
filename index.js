@@ -7,6 +7,7 @@ See LICENSE.txt
 'use strict'
 
 const makeTap = require('make-tap-output')
+const tage = require('tage')
 
 const isFunc = f => typeof f === 'function'
 const isNum = n => typeof n === 'number'
@@ -97,24 +98,9 @@ class PitestiSuite {
   }
 }
 
-function templateWrap (func) {
-  let orig = PitestiSuite.prototype[func]
-  PitestiSuite.prototype[func] = function () {
-    if (Array.isArray(arguments[0])) {
-      return (fn) => orig.call(
-        this,
-        String.raw(arguments[0], Array.prototype.slice.call(arguments, 1)),
-        fn
-      )
-    } else {
-      return orig.apply(this, arguments)
-    }
-  }
-}
-
-templateWrap('test')
-templateWrap('only')
-templateWrap('skip')
+['test', 'only', 'skip'].forEach(func => {
+  PitestiSuite.prototype[func] = tage(PitestiSuite.prototype[func])
+})
 
 module.exports = function (opts) {
   let testStarted = false
