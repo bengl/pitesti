@@ -8,11 +8,9 @@ See LICENSE.txt
 
 const makeTap = require('make-tap-output')
 const tage = require('tage')
+const createTestPromise = require('create-test-promise')
 
-const isFunc = f => typeof f === 'function'
 const isNum = n => typeof n === 'number'
-const isPromise = p => isFunc(p.then)
-const promisify = f => Promise.resolve().then(f)
 
 class PitestiSuite {
   constructor (opts) {
@@ -35,9 +33,7 @@ class PitestiSuite {
 
   test (name, fnOrP) {
     this.testNames.push(name)
-    this.tests.push(fnOrP ? () =>
-      isPromise(fnOrP) ? fnOrP : (isFunc(fnOrP) ? promisify(fnOrP) : null)
-    : null)
+    this.tests.push(fnOrP ? createTestPromise(fnOrP) : null)
   }
 
   runTest (i) {
