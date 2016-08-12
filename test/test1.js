@@ -12,7 +12,7 @@ fakeStream._write = function (chunk, enc, next) {
 
 let testOutput = `
 TAP version 13
-1..8
+1..14
 ok 1 foo example 1
 not ok 2 foo example 2
   ---
@@ -32,11 +32,32 @@ not ok 6 foo example 6
 
   ...
 ok 7 foo example 7
-ok 8 foo example 8 # SKIP
+ok 8 foo example 8
+not ok 9 foo example 9
+  ---
+  name: Error
+  stack: fake stack
 
-# tests 8
-# pass  3
-# fail  3
+  ...
+ok 10 foo example 10
+ok 11 foo example 11
+not ok 12 foo example 12
+  ---
+  name: Error
+  stack: fake stack
+
+  ...
+not ok 13 foo example 13
+  ---
+  name: Error
+  stack: fake stack
+
+  ...
+ok 14 foo example 14 # SKIP
+
+# tests 14
+# pass  6
+# fail  6
 # skip  2
 `
 
@@ -76,7 +97,19 @@ module.exports = function (cb) {
   test('foo example 7', function () {
     return Promise.resolve()
   })
-  test('foo example 8')
+  let err = Error()
+  err.stack = 'fake stack'
+  test('foo example 8', function () {})
+  test('foo example 9', function () { throw err })
+  test('foo example 10', function (cb) { cb() })
+  test('foo example 11', function (cb) { setImmediate(cb) })
+  test('foo example 12', function (cb) { cb(err) })
+  test('foo example 13', function (cb) {
+    setImmediate(function () {
+      cb(err)
+    })
+  })
+  test('foo example 14')
 
   console.log('#\n# test most things\n#')
   test()

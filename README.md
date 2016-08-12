@@ -1,14 +1,16 @@
 # PITESTI
 
-**`pitesti`** is a tiny test framework for promises *only*. It's only been
-tested on node v4.0.0, so YMMV on earlier versions of node/iojs.
+**`pitesti`** is a tiny but useful test framework for Node.js. It's only been
+tested on node v4.x, so YMMV on earlier versions of node.
 
 ## GOALS
 
 * Only output [TAP](https://testanything.org/).
-* Only allow promises for asynchronous testing.
-* Only allow promises for any testing.
-* Reject for fail, fulfill for pass.
+* Allow just about anything to be passed in as a "test". For example:
+   * A function that either throws or doesn't.
+   * A function taking a nodeback/errback, where the error indicates test fail.
+   * A promise (whose result is assumed by the test).
+   * A function returning a promise (whose result is assumed by the test).
 * Super-simple test definition format.
 * No setup or teardown functions.
 * Only care about node version >= 4.
@@ -52,6 +54,12 @@ test('foo example test 3', myPromise)
 // you can call test as a template literal, for a fun DSL
 test `foo example test 4` (() => Promise.resolve('good'))
 
+// you can also have tests that just call a callback or throw
+test `foo example test 5` (cb => {
+    maybeThrow()
+    maybeCallBackWithError(cb)
+})
+
 // this starts running the suite
 test()
 ```
@@ -84,12 +92,9 @@ a 100% success case.
 
 ### Assertions
 
-You can use whatever assertion library you want, provided that you still return
-a Promise whose end-result passes or fails the test.
-
-Because of the Promise-only nature of this framework, [chai-as-promised](https://www.npmjs.com/package/chai-as-promised)
-and [promise-assert](https://www.npmjs.com/package/promise-assert) are good
-suggestions.
+You can use whatever assertion library you want, provided that you return a
+Promise whose end-result passes or fails the test, or just simply throw. Pretty
+much every assertion library falls under this, so you should be fine.
 
 ### Skip and Only
 
@@ -139,11 +144,15 @@ ok 2 MyClass does another thing
 
 ### Caveats
 
-This framework is not suitable for situations where some things are happening
-asynchonously outside of promises. In such cases, if errors are thrown, or
-errbacks are ignored, you'll get undesired results. There is no use of domains
-or the global error handlers. **Therefore, you should only use this framework
-to test code that only uses Promises for async.**
+* Pitesti runs tests _sequentially_. While running in "parallel" might sound
+better, in reality, many real-world tests involve singletons and other global
+state that's changed throught the course of a single test. It's far easier to
+reason about what's going on if only one test can be causing an error at any
+given time.
+* If your code fails to examine errors in errbacks/nodebacks, or does not handle
+promise rejections, you may find that these errors are invisible. The position
+taken by Pitesti is that if you're ignoring an error, you don't care that it's
+an error, and it's not a problem for your code.
 
 ## LICENSE
 
