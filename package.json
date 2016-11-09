@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "create-test-promise": "^1.1.0",
-    "make-tap-output": "^1.0.0",
+    "make-tap-output": "^1.0.1",
     "tage": "^1.0.0"
   },
   "devDependencies": {
