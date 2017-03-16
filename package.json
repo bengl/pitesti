@@ -3,6 +3,10 @@
   "version": "2.2.0",
   "description": "A super-simple test framework.",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bengl/pitesti.git"
+  },
   "scripts": {
     "posttest": "standard",
     "test": "node test"
