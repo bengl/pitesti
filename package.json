@@ -19,6 +19,6 @@
     "tage": "^1.0.0"
   },
   "devDependencies": {
-    "standard": "^8.6.0"
+    "standard": "^9.0.0"
   }
 }
