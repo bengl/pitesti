@@ -36,12 +36,16 @@ module.exports = function (cb) {
   })
 
   test('outer test', function () {
-    test('inner test 1, which is ignored', Promise.reject())
+    test('inner test 1, which is ignored', () => Promise.reject())
     return Promise.resolve().then(function () {
-      test('inner test 2, which is ignored', Promise.reject())
+      test('inner test 2, which is ignored', () => Promise.reject())
       return true
     })
   })
 
   test()
+}
+
+if (require.main === module) {
+  module.exports(function () {})
 }

@@ -52,3 +52,7 @@ module.exports = function (cb) {
   console.log('#\n# test `only`\n#')
   test()
 }
+
+if (require.main === module) {
+  module.exports(function () {})
+}

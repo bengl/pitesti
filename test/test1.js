@@ -114,3 +114,7 @@ module.exports = function (cb) {
   console.log('#\n# test most things\n#')
   test()
 }
+
+if (require.main === module) {
+  module.exports(function () {})
+}
