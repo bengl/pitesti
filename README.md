@@ -17,7 +17,7 @@ You can also use `pitesti` in browsers. See below for details.
    * A function returning a promise (whose result is assumed by the test).
 * Super-simple test definition format.
 * No setup or teardown functions.
-* Only care about node version >= 4.
+* Only care about node version >= 6.
 
 ## USAGE
 
