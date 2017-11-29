@@ -33,6 +33,8 @@ options object (or nothing) with the following values:
 * `outputStream`: where to write TAP output. Default is `process.stdout`.
 * `summary`: whether or not to write a summary to the `outputStream` and the end
 of testing. Default is `true`.
+* `timeout`: Milliseconds after which to fail the test if it hasn't passed yet.
+Default is 5000. See "Timeouts" below.
 * `done`: a callback function that will take in an exit code. Default is
 `process.exit`.
 
@@ -121,6 +123,24 @@ test.skip('all tests except this one will run', function(){
     // ...
 })
 ```
+
+### Timeouts
+
+By default, each test case has a time limit of 5000ms, after which the test will
+be considered a failure.
+
+You can set a global timeout for an entire test suite using the options object
+as described above. You can also pass a third argument to the `test` function
+that is an options object containing a timeout option, in order to set a timeout
+for a specific test:
+
+```js
+test('this is a test with a 1 second timeout', () => {
+  // ...
+}, { timeout: 1000 })
+```
+
+To completely disable timeouts, you can set a `timeout` property to `Infinity`.
 
 ### Multiple Files
 

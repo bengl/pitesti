@@ -13,8 +13,7 @@ const createTestPromise = require('create-test-promise')
 const isNum = n => typeof n === 'number'
 
 class PitestiSuite {
-  constructor (opts) {
-    opts = opts || {}
+  constructor (opts = {}) {
     this.tests = []
     this.testNames = []
     this.skips = {}
@@ -29,11 +28,14 @@ class PitestiSuite {
     this.summary = opts.summary === undefined ? true : opts.summary
     this.tap = makeTap()
     this.tap.pipe(this.out)
+    this.timeout = opts.timeout || 5000
   }
 
-  test (name, fnOrP) {
+  test (name, fnOrP, opts = {}) {
     this.testNames.push(name)
-    this.tests.push(fnOrP ? createTestPromise(fnOrP) : null)
+    this.tests.push(fnOrP ? createTestPromise(fnOrP, {
+      timeout: opts.timeout || this.timeout
+    }) : null)
   }
 
   runTest (i) {

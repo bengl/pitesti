@@ -14,7 +14,7 @@
   "author": "Bryan English <bryan@bryanenglish.com>",
   "license": "MIT",
   "dependencies": {
-    "create-test-promise": "^1.1.0",
+    "create-test-promise": "^1.2.0",
     "make-tap-output": "^1.0.1",
     "tage": "^1.0.0"
   },
