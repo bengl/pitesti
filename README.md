@@ -2,8 +2,10 @@
 
 [![Build Status](https://travis-ci.org/bengl/pitesti.svg?branch=master)](https://travis-ci.org/bengl/pitesti)
 
-**`pitesti`** is a tiny but useful test framework for Node.js. It's only been
-tested on node v4.x, so YMMV on earlier versions of node.
+**`pitesti`** is a tiny but useful test framework for Node.js. Node 6.x and
+higher are supported.
+
+You can also use `pitesti` in browsers. See below for details.
 
 ## GOALS
 
@@ -22,7 +24,7 @@ tested on node v4.x, so YMMV on earlier versions of node.
 First, create a test suite.
 
 ```js
-let test = require('pitesti')()
+const test = require('pitesti')()
 ```
 
 `pitesti` exports a single function which creates test suites. It takes in an
@@ -37,7 +39,7 @@ of testing. Default is `true`.
 Now you can write some tests and run them.
 
 ```js
-let test = require('pitesti')()
+const test = require('pitesti')()
 
 // any function returning a promise can be a test
 test('foo example test 1', function(){
@@ -49,15 +51,20 @@ test('foo example test 2', function(){
     return Promise.reject(new Error('bad'))
 })
 
+// async functions also work just fine!
+test('foo example test 3', async function(){
+    await something()
+})
+
 // if you already have some promises lying around, you can pass those in
 let myPromise = Promise.resolve()
-test('foo example test 3', myPromise)
+test('foo example test 4', myPromise)
 
 // you can call test as a template literal, for a fun DSL
-test `foo example test 4` (() => Promise.resolve('good'))
+test `foo example test 5` (() => Promise.resolve('good'))
 
 // you can also have tests that just call a callback or throw
-test `foo example test 5` (cb => {
+test `foo example test 6` (cb => {
     maybeThrow()
     maybeCallBackWithError(cb)
 })
@@ -142,6 +149,28 @@ ok 1 MyClass does a thing
 ok 2 MyClass does another thing
 
 */
+```
+
+### Browser Usage
+
+Pitesti can be used in a browser environment via
+[`webpack`](https://webpack.js.org/), [`browserify`](http://browserify.org/), or
+other web packaging tools.
+
+You'll have to set an `outputStream`, so if you're using one of the tools above,
+you should be able to do something like:
+
+```js
+const pitesti = require('pitesti')
+const { Writable } = require('stream')
+const out = document.getElementById('test-output')
+const outputStream = new Writable({
+  write(chunk, encoding, cb) {
+    out.innerHTML += chunk
+    cb()
+  }
+})
+const test = pitesti({ outputStream });
 ```
 
 ### Caveats
