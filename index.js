@@ -29,6 +29,7 @@ class PitestiSuite {
     this.tap = makeTap()
     this.tap.pipe(this.out)
     this.timeout = opts.timeout || 5000
+    this.contextSeparator = opts.contextSeparator || ' '
   }
 
   test (name, fnOrP, opts = {}) {
@@ -80,9 +81,18 @@ class PitestiSuite {
     this.tests.push(null)
   }
 
-  only (name, t) {
+  only (...args) {
     this.onlyTest = this.tests.length
-    this.test(name, t)
+    this.test(...args)
+  }
+
+  context (prefix, fn) {
+    const ctx = tage((name, ...args) =>
+      this.test(`${prefix}${this.contextSeparator}${name}`, ...args))
+    if (fn) {
+      fn(ctx)
+    }
+    return ctx
   }
 
   plan () {
@@ -96,7 +106,7 @@ class PitestiSuite {
   }
 }
 
-['test', 'only', 'skip'].forEach(func => {
+['test', 'only', 'skip', 'context'].forEach(func => {
   PitestiSuite.prototype[func] = tage(PitestiSuite.prototype[func])
 })
 
@@ -117,5 +127,6 @@ module.exports = function (opts) {
   }
   test.only = function () { return suite.only.apply(suite, arguments) }
   test.skip = function () { return suite.skip.apply(suite, arguments) }
+  test.context = function () { return suite.context.apply(suite, arguments) }
   return test
 }

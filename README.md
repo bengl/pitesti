@@ -35,6 +35,8 @@ options object (or nothing) with the following values:
 of testing. Default is `true`.
 * `timeout`: Milliseconds after which to fail the test if it hasn't passed yet.
 Default is 5000. See "Timeouts" below.
+* `contextSeparator`: String used to separate context names from test names.
+  Default is `' '`.
 * `done`: a callback function that will take in an exit code. Default is
 `process.exit`.
 
@@ -136,7 +138,7 @@ for a specific test:
 
 ```js
 test('this is a test with a 1 second timeout', () => {
-  // ...
+    // ...
 }, { timeout: 1000 })
 ```
 
@@ -148,28 +150,21 @@ There is no facility for running tests from multiple files, but you could write
 test files as functions taking in the test suite function, and then pass that
 in to each module from a main test file.
 
-### Grouping
+### Grouping/Contexts
 
-There is no facility for grouping tests by class, module, file, or anything like
-that. If you want to do so, it's fairly straightforward to construct it
-yourself.
+You can add a layer of context to tests by using `test.context`:
 
 ```js
-function testMyClass(name, fn) {
-    test('MyClass '+name, fn)
-}
-
-testMyClass('does a thing', /* ... */)
-testMyClass('does another thing', /* ... */)
-
-/*
-would produce output like:
-
-ok 1 MyClass does a thing
-ok 2 MyClass does another thing
-
-*/
+test.context('MyClass', ctxTest => {
+    ctxTest.test('foo', () => { /* ... */ })
+    ctxTest.test('bar', () => { /* ... */ })
+})
 ```
+
+Currently this only supports one level of depth.
+
+You can change the separator used in the TAP output by using the
+`contextSeparator` option as defined above.
 
 ### Browser Usage
 
