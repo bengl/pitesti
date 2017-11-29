@@ -1,5 +1,7 @@
 # PITESTI
 
+[![Build Status](https://travis-ci.org/bengl/pitesti.svg?branch=master)](https://travis-ci.org/bengl/pitesti)
+
 **`pitesti`** is a tiny but useful test framework for Node.js. It's only been
 tested on node v4.x, so YMMV on earlier versions of node.
 
