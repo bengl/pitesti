@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bengl/pitesti.git"
+    "url": "https://github.com/bengl/pitesti.git"
   },
   "scripts": {
     "posttest": "standard",
