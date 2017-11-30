@@ -130,5 +130,6 @@ module.exports = function (opts) {
   test.only = function () { return suite.only.apply(suite, arguments) }
   test.skip = function () { return suite.skip.apply(suite, arguments) }
   test.context = function () { return suite.context.apply(suite, arguments) }
+  test.test = test // For destructuring
   return test
 }

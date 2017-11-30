@@ -23,7 +23,7 @@ ok 6 test 6
 `
 
 module.exports = function (cb) {
-  let test = require('../index')({
+  let { test, context } = require('../index')({
     outputStream: fakeStream,
     summary: false,
     contextSeparator: ' : ',
@@ -43,13 +43,13 @@ module.exports = function (cb) {
   })
 
   test('test 1', () => {})
-  test.context('ctx1', () => {
+  context('ctx1', () => {
     test('test 2', () => {})
     test`test 3`(() => {})
   })
-  test.context`ctx2`(() => {
+  context`ctx2`(() => {
     test('test 4', () => {})
-    test.context`ctx3`(() => {
+    context`ctx3`(() => {
       test('test 5', () => {})
     })
   })
