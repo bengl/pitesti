@@ -146,9 +146,15 @@ To completely disable timeouts, you can set a `timeout` property to `Infinity`.
 
 ### Multiple Files
 
-There is no facility for running tests from multiple files, but you could write
-test files as functions taking in the test suite function, and then pass that
-in to each module from a main test file.
+Pitesti isn't designed with files in mind. That means you're free to do whatever
+you want.
+
+There are two main suggested approaches to take:
+
+1. Write test files as functions taking in the test suite function, and then
+   pass that in to each module from a main test file.
+2. Use a tool like the [`node-tap` cli ](http://www.node-tap.org/cli/) to run
+   all your test files as individual suites.
 
 ### Grouping/Contexts
 
