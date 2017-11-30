@@ -30,10 +30,15 @@ class PitestiSuite {
     this.tap.pipe(this.out)
     this.timeout = opts.timeout || 5000
     this.contextSeparator = opts.contextSeparator || ' '
+    this.contexts = []
   }
 
   test (name, fnOrP, opts = {}) {
-    this.testNames.push(name)
+    this.testNames.push(
+      this.contexts.length
+      ? [...this.contexts, name].join(this.contextSeparator)
+      : name
+    )
     this.tests.push(fnOrP ? createTestPromise(fnOrP, {
       timeout: opts.timeout || this.timeout
     }) : null)
@@ -87,12 +92,9 @@ class PitestiSuite {
   }
 
   context (prefix, fn) {
-    const ctx = tage((name, ...args) =>
-      this.test(`${prefix}${this.contextSeparator}${name}`, ...args))
-    if (fn) {
-      fn(ctx)
-    }
-    return ctx
+    this.contexts.push(prefix)
+    fn()
+    this.contexts.pop(prefix)
   }
 
   plan () {

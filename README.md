@@ -155,13 +155,13 @@ in to each module from a main test file.
 You can add a layer of context to tests by using `test.context`:
 
 ```js
-test.context('MyClass', ctxTest => {
-    ctxTest.test('foo', () => { /* ... */ })
-    ctxTest.test('bar', () => { /* ... */ })
+test.context('MyClass', () => {
+    test('foo', () => { /* ... */ })
+    test('bar', () => { /* ... */ })
 })
 ```
 
-Currently this only supports one level of depth.
+You can do this up to an arbitrary depth.
 
 You can change the separator used in the TAP output by using the
 `contextSeparator` option as defined above.
