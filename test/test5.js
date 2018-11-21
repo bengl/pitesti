@@ -26,7 +26,7 @@ not ok 3 bad time
 
 module.exports = function (cb) {
   const oldPrepare = Error.prepareStackTrace
-  Error.prepareStackTrace = () => 'fake stack'
+  Error.prepareStackTrace = () => 'Error\nfake stack'
   let test = require('../index')({
     timeout: 50,
     outputStream: fakeStream,

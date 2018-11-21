@@ -83,7 +83,7 @@ module.exports = function (cb) {
     return Promise.resolve()
   })
   test('foo example 2', function () {
-    return Promise.reject({stack: 'this is a stack'})
+    return Promise.reject({stack: 'Error\nthis is a stack'})
   })
   test.skip('foo example 3', function () {
     return Promise.resolve()
@@ -91,14 +91,14 @@ module.exports = function (cb) {
   test('foo example 4', Promise.resolve())
   test `foo example 5`(Promise.reject('rejected string'))
   test('foo example 6', function () {
-    let err = {stack: 'this is a stack that is thrown'}
+    let err = {stack: 'Error\nthis is a stack that is thrown'}
     throw err
   })
   test('foo example 7', function () {
     return Promise.resolve()
   })
   let err = Error()
-  err.stack = 'fake stack'
+  err.stack = 'Error\nfake stack'
   test('foo example 8', function () {})
   test('foo example 9', function () { throw err })
   test('foo example 10', function (cb) { cb() })
