@@ -108,28 +108,28 @@ class PitestiSuite {
   }
 }
 
-['test', 'only', 'skip', 'context'].forEach(func => {
+for (const func of ['test', 'only', 'skip', 'context']) {
   PitestiSuite.prototype[func] = tage(PitestiSuite.prototype[func])
-})
+}
 
 module.exports = function (opts) {
   let testStarted = false
   const suite = new PitestiSuite(opts)
-  const test = function () {
+  const test = (...args) => {
     if (testStarted) {
       return
     }
-    if (arguments.length === 0) {
+    if (args.length === 0) {
       testStarted = true
       suite.plan()
       suite.runTest(0)
       return
     }
-    return suite.test.apply(suite, arguments)
+    return suite.test(...args)
   }
-  test.only = function () { return suite.only.apply(suite, arguments) }
-  test.skip = function () { return suite.skip.apply(suite, arguments) }
-  test.context = function () { return suite.context.apply(suite, arguments) }
+  test.only = (...args) => suite.only(...args)
+  test.skip = (...args) => suite.skip(...args)
+  test.context = (...args) => suite.context(...args)
   test.test = test // For destructuring
   return test
 }

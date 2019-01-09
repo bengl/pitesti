@@ -1,6 +1,6 @@
 'use strict'
 
-let files = require('fs').readdirSync('./test')
+const files = require('fs').readdirSync('./test')
 
 function runTests () {
   if (!files.length) {
@@ -8,7 +8,7 @@ function runTests () {
     process.exit(0)
   }
 
-  let suite = files.shift()
+  const suite = files.shift()
   if (/\.js$/.test(suite)) {
     try {
       console.log(`\n# ######## TEST SUITE ${suite} #####`)
