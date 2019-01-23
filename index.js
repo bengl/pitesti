@@ -15,6 +15,7 @@ const isNum = n => typeof n === 'number'
 class PitestiSuite {
   constructor (opts = {}) {
     this.tests = []
+    this.afterTest = []
     this.testNames = []
     this.skips = {}
     this.totalSkips = 0
@@ -39,9 +40,14 @@ class PitestiSuite {
       ? [...this.contexts, name].join(this.contextSeparator)
       : name
     )
-    this.tests.push(fnOrP ? createTestPromise(fnOrP, {
+    const testCase = fnOrP ? createTestPromise(fnOrP, {
       timeout: opts.timeout || this.timeout
-    }) : null)
+    }) : null
+    if (this.startSub) {
+      testCase.startSub = this.startSub
+      delete this.startSub
+    }
+    this.tests.push(testCase)
   }
 
   runTest (i) {
@@ -64,7 +70,13 @@ class PitestiSuite {
       this.totalSkips++
       return this.runTest(++i)
     }
-    this.tests[i]()
+    const testCase = this.tests[i]
+    if (testCase.startSub) {
+      const parentTap = this.tap
+      this.tap = this.tap.unbufferedSub(testCase.startSub)
+      this.tap.parentTap = parentTap
+    }
+    testCase()
     .then(
       () => {
         this.totalPasses++
@@ -76,7 +88,12 @@ class PitestiSuite {
         this.tap.fail(name, typeof err === 'string' ? {message: err} : err)
       }
     )
-    .then(() => this.runTest(++i))
+    .then(() => {
+      if (this.afterTest[i]) {
+        this.afterTest[i]()
+      }
+      this.runTest(++i)
+    })
     .catch(e => this.bailOut(e))
     // ^ Should only get here if there's an error in our code.
   }
@@ -97,6 +114,23 @@ class PitestiSuite {
     this.contexts.pop(prefix)
   }
 
+  subtest (name, fn) {
+    this.startSub = name
+    const testLength = this.tests.length
+    fn()
+    if (this.tests.length === testLength) {
+      throw new Error('empty subtest')
+    }
+    const last = this.tests.length - 1
+    const preExistingAfterTest = this.afterTest[last]
+    this.afterTest[last] = () => {
+      if (preExistingAfterTest) {
+        preExistingAfterTest()
+      }
+      this.tap = this.tap.parentTap
+    }
+  }
+
   plan () {
     this.tap.plan(this.tests.length)
   }
@@ -108,7 +142,7 @@ class PitestiSuite {
   }
 }
 
-for (const func of ['test', 'only', 'skip', 'context']) {
+for (const func of ['test', 'only', 'skip', 'context', 'subtest']) {
   PitestiSuite.prototype[func] = tage(PitestiSuite.prototype[func])
 }
 
@@ -130,6 +164,7 @@ module.exports = function (opts) {
   test.only = (...args) => suite.only(...args)
   test.skip = (...args) => suite.skip(...args)
   test.context = (...args) => suite.context(...args)
+  test.subtest = (...args) => suite.subtest(...args)
   test.test = test // For destructuring
   return test
 }
