@@ -76,26 +76,26 @@ class PitestiSuite {
       this.tap = this.tap.unbufferedSub(testCase.startSub);
       this.tap.parentTap = parentTap;
     }
-    testCase()
-      .then(
-        () => {
-          this.totalPasses++;
-          this.tap.pass(name);
-        },
-        err => {
-          this.exitCode = 1;
-          this.totalFails++;
-          this.tap.fail(name, typeof err === 'string' ? { message: err } : err);
-        }
-      )
-      .then(() => {
+    (async () => {
+      try {
+        await testCase();
+        this.totalPasses++;
+        this.tap.pass(name);
+      } catch (err) {
+        this.exitCode = 1;
+        this.totalFails++;
+        this.tap.fail(name, typeof err === 'string' ? { message: err } : err);
+      }
+      try {
         if (this.afterTest[i]) {
           this.afterTest[i]();
         }
         this.runTest(++i);
-      })
-      .catch(e => this.bailOut(e));
-    // ^ Should only get here if there's an error in our code.
+      } catch (e) {
+        // Should only get here if there's an error in our code.
+        this.bailOut(e);
+      }
+    })();
   }
 
   skip (name) {

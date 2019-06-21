@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/bengl/pitesti.svg?branch=master)](https://travis-ci.org/bengl/pitesti)
 
-**`pitesti`** is a tiny but useful test framework for Node.js. Node 6.x and
+**`pitesti`** is a tiny but useful test framework for Node.js. Node 8.x and
 higher are supported.
 
 You can also use `pitesti` in browsers. See below for details.
@@ -17,7 +17,7 @@ You can also use `pitesti` in browsers. See below for details.
    * A function returning a promise (whose result is assumed by the test).
 * Super-simple test definition format.
 * No setup or teardown functions.
-* Only care about node version >= 6.
+* Only care about Node.js major versions that aren't EOL.
 
 ## USAGE
 
