@@ -8,7 +8,7 @@
     "url": "https://github.com/bengl/pitesti.git"
   },
   "scripts": {
-    "posttest": "standard",
+    "posttest": "semistandard",
     "test": "node test"
   },
   "author": "Bryan English <bryan@bryanenglish.com>",
@@ -19,6 +19,6 @@
     "tage": "^1.0.0"
   },
   "devDependencies": {
-    "standard": "^8.6.0"
+    "semistandard": "^13.0.1"
   }
 }

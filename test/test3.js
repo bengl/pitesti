@@ -1,14 +1,14 @@
-'use strict'
+'use strict';
 
-const assert = require('assert')
+const assert = require('assert');
 
-let fakeStream = new (require('stream').Writable)()
+let fakeStream = new (require('stream').Writable)();
 
-fakeStream.buff = ''
+fakeStream.buff = '';
 fakeStream._write = function (chunk, enc, next) {
-  this.buff += chunk.toString()
-  next()
-}
+  this.buff += chunk.toString();
+  next();
+};
 
 let testOutput = `
 TAP version 13
@@ -19,36 +19,36 @@ ok 2 bar example 2
 # tests 2
 # pass  2
 # fail  0
-`
+`;
 
 module.exports = function (cb) {
-  let oldExit = process.exit
-  let oldOut = Object.getOwnPropertyDescriptor(process, 'stdout')
+  let oldExit = process.exit;
+  let oldOut = Object.getOwnPropertyDescriptor(process, 'stdout');
   process.exit = function (code) {
     try {
-      console.log(fakeStream.buff.trim())
+      console.log(fakeStream.buff.trim());
       // console.log(require('util').inspect(fakeStream.buff.trim()))
       // console.log(require('util').inspect(testOutput.trim()))
-      assert.equal(code, 0)
-      assert.equal(fakeStream.buff.trim(), testOutput.trim())
-      cb()
+      assert.strictEqual(code, 0);
+      assert.strictEqual(fakeStream.buff.trim(), testOutput.trim());
+      cb();
     } catch (e) {
-      console.error(e.stack)
-      oldExit(1)
+      console.error(e.stack);
+      oldExit(1);
     }
-  }
-  Object.defineProperty(process, 'stdout', {value: fakeStream})
-  let test = require('../index')()
-  Object.defineProperty(process, 'stdout', oldOut)
-  process.exit = oldExit
+  };
+  Object.defineProperty(process, 'stdout', { value: fakeStream });
+  let test = require('../index')();
+  Object.defineProperty(process, 'stdout', oldOut);
+  process.exit = oldExit;
 
-  test('bar example 1', Promise.resolve())
-  test('bar example 2', Promise.resolve())
+  test('bar example 1', Promise.resolve());
+  test('bar example 2', Promise.resolve());
 
-  console.log('#\n# test defaults\n#')
-  test()
-}
+  console.log('#\n# test defaults\n#');
+  test();
+};
 
 if (require.main === module) {
-  module.exports(function () {})
+  module.exports(function () {});
 }

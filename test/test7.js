@@ -1,14 +1,14 @@
-'use strict'
+'use strict';
 
-const assert = require('assert')
+const assert = require('assert');
 
-let fakeStream = new (require('stream').Writable)()
+let fakeStream = new (require('stream').Writable)();
 
-fakeStream.buff = ''
+fakeStream.buff = '';
 fakeStream._write = function (chunk, enc, next) {
-  this.buff += chunk.toString()
-  next()
-}
+  this.buff += chunk.toString();
+  next();
+};
 
 let testOutput = `
 TAP version 13
@@ -30,7 +30,7 @@ ok 4 main test 4
 # tests 10
 # pass  10
 # fail  0
-`
+`;
 
 module.exports = function (cb) {
   let test = require('../index')({
@@ -38,39 +38,39 @@ module.exports = function (cb) {
     summary: true,
     done: function (code) {
       try {
-        console.log(fakeStream.buff.trim())
+        console.log(fakeStream.buff.trim());
         // console.log(require('util').inspect(fakeStream.buff.trim()))
         // console.log(require('util').inspect(testOutput.trim()))
-        assert.equal(code, 0)
-        assert.equal(fakeStream.buff.trim(), testOutput.trim())
-        cb()
+        assert.strictEqual(code, 0);
+        assert.strictEqual(fakeStream.buff.trim(), testOutput.trim());
+        cb();
       } catch (e) {
-        console.error(e.stack)
-        process.exit(1)
+        console.error(e.stack);
+        process.exit(1);
       }
     }
-  })
+  });
 
-  test('main test 1', () => {})
+  test('main test 1', () => {});
   test.subtest('sub test 1', () => {
-    test('sub test 1 1', () => {})
-    test('sub test 1 2', () => {})
-  })
-  test('main test 2', () => {})
-  test('main test 3', () => {})
+    test('sub test 1 1', () => {});
+    test('sub test 1 2', () => {});
+  });
+  test('main test 2', () => {});
+  test('main test 3', () => {});
   test.subtest('sub test 2', () => {
-    test('sub test 2 1', () => {})
-    test('sub test 2 2', () => {})
+    test('sub test 2 1', () => {});
+    test('sub test 2 2', () => {});
     test.subtest('sub sub test 1', () => {
-      test('sub sub test 1 1', () => {})
-      test('sub sub test 1 2', () => {})
-    })
-  })
-  test('main test 4', () => {})
+      test('sub sub test 1 1', () => {});
+      test('sub sub test 1 2', () => {});
+    });
+  });
+  test('main test 4', () => {});
 
-  test()
-}
+  test();
+};
 
 if (require.main === module) {
-  module.exports(function () {})
+  module.exports(function () {});
 }

@@ -1,14 +1,14 @@
-'use strict'
+'use strict';
 
-const assert = require('assert')
+const assert = require('assert');
 
-let fakeStream = new (require('stream').Writable)()
+let fakeStream = new (require('stream').Writable)();
 
-fakeStream.buff = ''
+fakeStream.buff = '';
 fakeStream._write = function (chunk, enc, next) {
-  this.buff += chunk.toString()
-  next()
-}
+  this.buff += chunk.toString();
+  next();
+};
 
 let testOutput = `
 TAP version 13
@@ -22,46 +22,46 @@ not ok 3 bad time
   stack: fake stack
 
   ...
-`
+`;
 
 module.exports = function (cb) {
-  const oldPrepare = Error.prepareStackTrace
-  Error.prepareStackTrace = () => 'Error\nfake stack'
+  const oldPrepare = Error.prepareStackTrace;
+  Error.prepareStackTrace = () => 'Error\nfake stack';
   let test = require('../index')({
     timeout: 50,
     outputStream: fakeStream,
     summary: false,
     done: function (code) {
       try {
-        console.log(fakeStream.buff.trim())
+        console.log(fakeStream.buff.trim());
         // console.log(require('util').inspect(fakeStream.buff.trim()))
         // console.log(require('util').inspect(testOutput.trim()))
-        assert.equal(code, 1)
-        assert.equal(fakeStream.buff.trim(), testOutput.trim())
-        Error.prepareStackTrace = oldPrepare
-        cb()
+        assert.strictEqual(code, 1);
+        assert.strictEqual(fakeStream.buff.trim(), testOutput.trim());
+        Error.prepareStackTrace = oldPrepare;
+        cb();
       } catch (e) {
-        console.error(e.stack)
-        process.exit(1)
+        console.error(e.stack);
+        process.exit(1);
       }
     }
-  })
+  });
 
   test('good time', function (cb) {
-    setTimeout(cb, 25)
-  })
+    setTimeout(cb, 25);
+  });
 
   test('good time on own time', function (cb) {
-    setTimeout(cb, 50)
-  }, { timeout: 100 })
+    setTimeout(cb, 50);
+  }, { timeout: 100 });
 
   test('bad time', function (cb) {
-    setTimeout(cb, 75)
-  })
+    setTimeout(cb, 75);
+  });
 
-  test()
-}
+  test();
+};
 
 if (require.main === module) {
-  module.exports(function () {})
+  module.exports(function () {});
 }
