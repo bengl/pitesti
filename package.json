@@ -14,11 +14,11 @@
   "author": "Bryan English <bryan@bryanenglish.com>",
   "license": "MIT",
   "dependencies": {
-    "create-test-promise": "^1.2.0",
-    "make-tap-output": "^1.2.2",
+    "create-test-promise": "^2.0.0",
+    "make-tap-output": "^2.0.0",
     "tage": "^1.0.0"
   },
   "devDependencies": {
-    "semistandard": "^13.0.1"
+    "semistandard": "^14.2.2"
   }
 }

@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 
-let fakeStream = new (require('stream').Writable)();
+const fakeStream = new (require('stream').Writable)();
 
 fakeStream.buff = '';
 fakeStream._write = function (chunk, enc, next) {
@@ -10,7 +10,7 @@ fakeStream._write = function (chunk, enc, next) {
   next();
 };
 
-let testOutput = `
+const testOutput = `
 TAP version 13
 1..5
 ok 1 bar example 1 # SKIP
@@ -26,7 +26,7 @@ ok 5 bar example 5 # SKIP
 `;
 
 module.exports = function (cb) {
-  let test = require('../index')({
+  const test = require('../index')({
     outputStream: fakeStream,
     done: function (code) {
       try {

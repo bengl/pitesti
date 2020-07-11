@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 
-let fakeStream = new (require('stream').Writable)();
+const fakeStream = new (require('stream').Writable)();
 
 fakeStream.buff = '';
 fakeStream._write = function (chunk, enc, next) {
@@ -10,7 +10,7 @@ fakeStream._write = function (chunk, enc, next) {
   next();
 };
 
-let testOutput = `
+const testOutput = `
 TAP version 13
 1..2
 ok 1 bar example 1
@@ -22,8 +22,8 @@ ok 2 bar example 2
 `;
 
 module.exports = function (cb) {
-  let oldExit = process.exit;
-  let oldOut = Object.getOwnPropertyDescriptor(process, 'stdout');
+  const oldExit = process.exit;
+  const oldOut = Object.getOwnPropertyDescriptor(process, 'stdout');
   process.exit = function (code) {
     try {
       console.log(fakeStream.buff.trim());
@@ -38,7 +38,7 @@ module.exports = function (cb) {
     }
   };
   Object.defineProperty(process, 'stdout', { value: fakeStream });
-  let test = require('../index')();
+  const test = require('../index')();
   Object.defineProperty(process, 'stdout', oldOut);
   process.exit = oldExit;
 

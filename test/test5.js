@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 
-let fakeStream = new (require('stream').Writable)();
+const fakeStream = new (require('stream').Writable)();
 
 fakeStream.buff = '';
 fakeStream._write = function (chunk, enc, next) {
@@ -10,7 +10,7 @@ fakeStream._write = function (chunk, enc, next) {
   next();
 };
 
-let testOutput = `
+const testOutput = `
 TAP version 13
 1..3
 ok 1 good time
@@ -27,7 +27,7 @@ not ok 3 bad time
 module.exports = function (cb) {
   const oldPrepare = Error.prepareStackTrace;
   Error.prepareStackTrace = () => 'Error\nfake stack';
-  let test = require('../index')({
+  const test = require('../index')({
     timeout: 50,
     outputStream: fakeStream,
     summary: false,

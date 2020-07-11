@@ -4,7 +4,7 @@
 
 const assert = require('assert');
 
-let fakeStream = new (require('stream').Writable)();
+const fakeStream = new (require('stream').Writable)();
 
 fakeStream.buff = '';
 fakeStream._write = function (chunk, enc, next) {
@@ -12,7 +12,7 @@ fakeStream._write = function (chunk, enc, next) {
   next();
 };
 
-let testOutput = `
+const testOutput = `
 TAP version 13
 1..14
 ok 1 foo example 1
@@ -64,7 +64,7 @@ ok 14 foo example 14 # SKIP
 `;
 
 module.exports = function (cb) {
-  let test = require('../index')({
+  const test = require('../index')({
     outputStream: fakeStream,
     done: function (code) {
       try {
@@ -93,13 +93,13 @@ module.exports = function (cb) {
   test('foo example 4', Promise.resolve());
   test`foo example 5`(Promise.reject('rejected string'));
   test('foo example 6', function () {
-    let err = { stack: 'Error\nthis is a stack that is thrown' };
+    const err = { stack: 'Error\nthis is a stack that is thrown' };
     throw err;
   });
   test('foo example 7', function () {
     return Promise.resolve();
   });
-  let err = Error();
+  const err = Error();
   err.stack = 'Error\nfake stack';
   test('foo example 8', function () {});
   test('foo example 9', function () { throw err; });
