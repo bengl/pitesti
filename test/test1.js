@@ -2,15 +2,7 @@
 
 /* eslint-disable prefer-promise-reject-errors */
 
-const assert = require('assert');
-
-const fakeStream = new (require('stream').Writable)();
-
-fakeStream.buff = '';
-fakeStream._write = function (chunk, enc, next) {
-  this.buff += chunk.toString();
-  next();
-};
+const { getTest } = require('./helpers');
 
 const testOutput = `
 TAP version 13
@@ -64,21 +56,10 @@ ok 14 foo example 14 # SKIP
 `;
 
 module.exports = function (cb) {
-  const test = require('../index')({
-    outputStream: fakeStream,
-    done: function (code) {
-      try {
-        console.log(fakeStream.buff.trim());
-        // console.log(require('util').inspect(fakeStream.buff.trim()))
-        // console.log(require('util').inspect(testOutput.trim()))
-        assert.strictEqual(code, 1);
-        assert.strictEqual(fakeStream.buff.trim(), testOutput.trim());
-        cb();
-      } catch (e) {
-        console.error(e.stack);
-        process.exit(1);
-      }
-    }
+  const test = getTest({
+    expected: testOutput,
+    cb,
+    expectedCode: 1
   });
 
   test('foo example 1', function () {

@@ -9,7 +9,7 @@ function runTests () {
   }
 
   const suite = files.shift();
-  if (/\.js$/.test(suite)) {
+  if (/test.*\.js$/.test(suite)) {
     try {
       console.log(`\n# ######## TEST SUITE ${suite} #####`);
       require(require('path').join(__dirname, 'test', suite))(() => setImmediate(runTests));

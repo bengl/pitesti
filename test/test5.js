@@ -1,14 +1,6 @@
 'use strict';
 
-const assert = require('assert');
-
-const fakeStream = new (require('stream').Writable)();
-
-fakeStream.buff = '';
-fakeStream._write = function (chunk, enc, next) {
-  this.buff += chunk.toString();
-  next();
-};
+const { getTest } = require('./helpers');
 
 const testOutput = `
 TAP version 13
@@ -27,23 +19,14 @@ not ok 3 bad time
 module.exports = function (cb) {
   const oldPrepare = Error.prepareStackTrace;
   Error.prepareStackTrace = () => 'Error\nfake stack';
-  const test = require('../index')({
-    timeout: 50,
-    outputStream: fakeStream,
-    summary: false,
-    done: function (code) {
-      try {
-        console.log(fakeStream.buff.trim());
-        // console.log(require('util').inspect(fakeStream.buff.trim()))
-        // console.log(require('util').inspect(testOutput.trim()))
-        assert.strictEqual(code, 1);
-        assert.strictEqual(fakeStream.buff.trim(), testOutput.trim());
-        Error.prepareStackTrace = oldPrepare;
-        cb();
-      } catch (e) {
-        console.error(e.stack);
-        process.exit(1);
-      }
+
+  const test = getTest({
+    expected: testOutput,
+    config: { summary: false, timeout: 50 },
+    expectedCode: 1,
+    cb: () => {
+      Error.prepareStackTrace = oldPrepare;
+      cb();
     }
   });
 

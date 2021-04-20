@@ -1,14 +1,6 @@
 'use strict';
 
-const assert = require('assert');
-
-const fakeStream = new (require('stream').Writable)();
-
-fakeStream.buff = '';
-fakeStream._write = function (chunk, enc, next) {
-  this.buff += chunk.toString();
-  next();
-};
+const { getTest } = require('./helpers');
 
 const testOutput = `
 TAP version 13
@@ -23,23 +15,10 @@ ok 6 test 6
 `;
 
 module.exports = function (cb) {
-  const { test, context } = require('../index')({
-    outputStream: fakeStream,
-    summary: false,
-    contextSeparator: ' : ',
-    done: function (code) {
-      try {
-        console.log(fakeStream.buff.trim());
-        // console.log(require('util').inspect(fakeStream.buff.trim()))
-        // console.log(require('util').inspect(testOutput.trim()))
-        assert.strictEqual(code, 0);
-        assert.strictEqual(fakeStream.buff.trim(), testOutput.trim());
-        cb();
-      } catch (e) {
-        console.error(e.stack);
-        process.exit(1);
-      }
-    }
+  const { test, context } = getTest({
+    expected: testOutput,
+    cb,
+    config: { summary: false, contextSeparator: ' : ' }
   });
 
   test('test 1', () => {});

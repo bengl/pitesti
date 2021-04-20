@@ -2,13 +2,7 @@
 
 const assert = require('assert');
 
-const fakeStream = new (require('stream').Writable)();
-
-fakeStream.buff = '';
-fakeStream._write = function (chunk, enc, next) {
-  this.buff += chunk.toString();
-  next();
-};
+const { getFakeStream } = require('./helpers');
 
 const testOutput = `
 TAP version 13
@@ -22,6 +16,7 @@ ok 2 bar example 2
 `;
 
 module.exports = function (cb) {
+  const fakeStream = getFakeStream();
   const oldExit = process.exit;
   const oldOut = Object.getOwnPropertyDescriptor(process, 'stdout');
   process.exit = function (code) {
