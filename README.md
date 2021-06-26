@@ -16,7 +16,7 @@ You can also use `pitesti` in browsers. See below for details.
    * A promise (whose result is assumed by the test).
    * A function returning a promise (whose result is assumed by the test).
 * Super-simple test definition format.
-* No setup or teardown functions.
+* No setup or teardown functions (except in BDD mode).
 * Only care about Node.js major versions that aren't EOL.
 
 ## USAGE
@@ -171,6 +171,47 @@ You can do this up to an arbitrary depth.
 
 You can change the separator used in the TAP output by using the
 `contextSeparator` option as defined above.
+
+
+### Mocha/BDD Syntax
+
+A BDD-style interface is provided, exported as `pitesti/bdd`. The exported
+functions are as follows, with the effectively the same functionality as
+Mocha.
+
+* `describe`
+* `context`
+* `it`
+* `before`
+* `beforeAll` (same as `before`)
+* `beforeEach`
+* `after`
+* `afterAll` (same as `after`)
+* `afterEach`
+
+If you'd like these as globals, you can do something like this.
+
+```js
+Object.assign(global, require('pitesti/bdd`))
+```
+
+Note that Mocha's `this` object is not supported. Instead, to configure an
+individual test for timeouts, add an extra parameter to the `it` function, much
+like the `test` function in regular Pitesti.
+
+For example:
+
+```js
+it('does a thing', () => {
+  // ... some slow code ...
+}, { timeout: 10000 });
+```
+
+Much like with Mocha, you don't need to initiate the test suite. It will run
+on its own in a `nextTick`. Unlike Mocha, you cannot add additional test cases
+dynamically after the first tick.
+
+> **NOTE:** `pitesti/bdd` does not currently work in browsers.
 
 ### Browser Usage
 

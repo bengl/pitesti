@@ -1,0 +1,48 @@
+TAP version 13
+1..41
+ok 1 [before]
+ok 2 [before]
+ok 3 describe1 [before]
+ok 4 describe1 [before]
+ok 5 describe1 [before]
+ok 6 describe1 [before]
+ok 7 describe1 ctx1 [before]
+ok 8 describe1 ctx1 [before]
+ok 9 describe1 ctx1 test1 [beforeEach]
+ok 10 describe1 ctx1 test1 [beforeEach]
+ok 11 describe1 ctx1 test1 [beforeEach]
+ok 12 describe1 ctx1 test1 [beforeEach]
+ok 13 describe1 ctx1 test1 [beforeEach]
+ok 14 describe1 ctx1 test1 [beforeEach]
+ok 15 describe1 ctx1 test1
+ok 16 describe1 ctx1 test1 [afterEach]
+ok 17 describe1 ctx1 test1 [afterEach]
+ok 18 describe1 ctx1 test1 [afterEach]
+ok 19 describe1 ctx1 test1 [afterEach]
+ok 20 describe1 ctx1 test1 [afterEach]
+ok 21 describe1 ctx1 test1 [afterEach]
+ok 22 describe1 ctx1 [after]
+ok 23 describe1 ctx1 [after]
+ok 24 describe1 ctx2 test1 [beforeEach]
+ok 25 describe1 ctx2 test1 [beforeEach]
+ok 26 describe1 ctx2 test1 [beforeEach]
+ok 27 describe1 ctx2 test1 [beforeEach]
+ok 28 describe1 ctx2 test1
+ok 29 describe1 ctx2 test1 [afterEach]
+ok 30 describe1 ctx2 test1 [afterEach]
+ok 31 describe1 ctx2 test1 [afterEach]
+ok 32 describe1 ctx2 test1 [afterEach]
+ok 33 describe1 [after]
+ok 34 describe1 [after]
+ok 35 describe1 [after]
+ok 36 describe1 [after]
+ok 37 describe2 ctx1 test1
+ok 38 describe2 test1 # SKIP
+ok 39 describe3 test1 # SKIP
+ok 40 [after]
+ok 41 [after]
+
+# tests 41
+# pass  39
+# fail  0
+# skip  2

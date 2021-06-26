@@ -1,0 +1,31 @@
+TAP version 13
+1..24
+ok 1 [before]
+ok 2 [before]
+ok 3 describe1 [before]
+ok 4 describe1 ctx1 test1 [beforeEach] # SKIP
+ok 5 describe1 ctx1 test1 [beforeEach] # SKIP
+ok 6 describe1 ctx1 test1 # SKIP
+ok 7 describe1 ctx1 test1 [afterEach] # SKIP
+ok 8 describe1 ctx2 test1 [beforeEach]
+ok 9 describe1 ctx2 test1 [beforeEach]
+ok 10 describe1 ctx2 test1
+ok 11 describe1 ctx2 test1 [afterEach]
+ok 12 describe2 [before] # SKIP
+ok 13 describe2 ctx1 test1 [beforeEach] # SKIP
+ok 14 describe2 ctx1 test1 [beforeEach] # SKIP
+ok 15 describe2 ctx1 test1 # SKIP
+ok 16 describe2 ctx1 test1 [afterEach] # SKIP
+ok 17 describe2 test1 [beforeEach] # SKIP
+ok 18 describe2 test1 [beforeEach] # SKIP
+ok 19 describe2 test1 # SKIP
+ok 20 describe2 test1 [afterEach] # SKIP
+ok 21 describe3 test1 [beforeEach]
+ok 22 describe3 test1
+ok 23 [after]
+ok 24 [after]
+
+# tests 24
+# pass  11
+# fail  0
+# skip  13
