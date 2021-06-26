@@ -1,6 +1,6 @@
 # PITESTI
 
-[![Build Status](https://travis-ci.org/bengl/pitesti.svg?branch=master)](https://travis-ci.org/bengl/pitesti)
+[![Build Status](https://github.com/bengl/pitesti/actions/workflows/ci.yml/badge.svg)](https://github.com/bengl/pitesti/actions/workflows/ci.yml)
 
 **`pitesti`** is a tiny but useful test framework for Node.js. Node 12.x and
 higher are supported.
