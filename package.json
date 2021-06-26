@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "description": "A super-simple test framework.",
   "main": "index.js",
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/bengl/pitesti.git"
