@@ -99,7 +99,11 @@ class PitestiSuite {
   }
 
   skip (name) {
-    this.testNames.push(name);
+    this.testNames.push(
+      this.contexts.length
+        ? [...this.contexts, name].join(this.contextSeparator)
+        : name
+    );
     this.tests.push(null);
   }
 
@@ -112,6 +116,19 @@ class PitestiSuite {
     this.contexts.push(prefix);
     fn();
     this.contexts.pop(prefix);
+  }
+
+  skipContext (prefix, fn) {
+    const wasNotSkipping = this.context !== this.skipContext;
+    if (wasNotSkipping) {
+      this.context = this.skipContext;
+      this.test = this.skip;
+    }
+    this.constructor.prototype.context.call(this, prefix, fn);
+    if (wasNotSkipping) {
+      delete this.context;
+      delete this.test;
+    }
   }
 
   subtest (name, fn) {
@@ -142,7 +159,7 @@ class PitestiSuite {
   }
 }
 
-for (const func of ['test', 'only', 'skip', 'context', 'subtest']) {
+for (const func of ['test', 'only', 'skip', 'context', 'skipContext', 'subtest']) {
   PitestiSuite.prototype[func] = tage(PitestiSuite.prototype[func]);
 }
 
@@ -164,6 +181,7 @@ module.exports = function (opts) {
   test.only = (...args) => suite.only(...args);
   test.skip = (...args) => suite.skip(...args);
   test.context = (...args) => suite.context(...args);
+  test.context.skip = (...args) => suite.skipContext(...args);
   test.subtest = (...args) => suite.subtest(...args);
   test.test = test; // For destructuring
   return test;
