@@ -92,5 +92,4 @@ test('foo example 13', function (cb) {
 });
 test('foo example 14');
 
-console.log('#\n# test most things\n#');
 test();

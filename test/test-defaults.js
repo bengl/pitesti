@@ -38,5 +38,4 @@ process.exit = oldExit;
 test('bar example 1', Promise.resolve());
 test('bar example 2', Promise.resolve());
 
-console.log('#\n# test defaults\n#');
 test();

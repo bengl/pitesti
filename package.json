@@ -10,7 +10,7 @@
   },
   "scripts": {
     "posttest": "semistandard",
-    "test": "imhotap test/test*.js"
+    "test": "imhotap test/test-*.js"
   },
   "author": "Bryan English <bryan@bryanenglish.com>",
   "license": "MIT",
