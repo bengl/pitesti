@@ -17,14 +17,13 @@ You can also use `pitesti` in browsers. See below for details.
    * A function returning a promise (whose result is assumed by the test).
 * Super-simple test definition format.
 * No setup or teardown functions (except in BDD mode).
-* Only care about Node.js major versions that aren't EOL.
 
 ## USAGE
 
 First, create a test suite.
 
 ```js
-const test = require('pitesti')()
+const test = require('pitesti')();
 ```
 
 `pitesti` exports a single function which creates test suites. It takes in an
@@ -43,38 +42,38 @@ Default is 5000. See "Timeouts" below.
 Now you can write some tests and run them.
 
 ```js
-const test = require('pitesti')()
+const test = require('pitesti')();
 
 // any function returning a promise can be a test
 test('foo example test 1', function(){
-    return Promise.resolve();
-})
+  return Promise.resolve();
+});
 
 // a failing test is one that returns a (eventually) rejecting promise
 test('foo example test 2', function(){
-    return Promise.reject(new Error('bad'))
-})
+  return Promise.reject(new Error('bad'));
+});
 
 // async functions also work just fine!
 test('foo example test 3', async function(){
-    await something()
-})
+  await something();
+});
 
 // if you already have some promises lying around, you can pass those in
-let myPromise = Promise.resolve()
-test('foo example test 4', myPromise)
+let myPromise = Promise.resolve();
+test('foo example test 4', myPromise);
 
 // you can call test as a template literal, for a fun DSL
-test `foo example test 5` (() => Promise.resolve('good'))
+test `foo example test 5` (() => Promise.resolve('good'));
 
 // you can also have tests that just call a callback or throw
 test `foo example test 6` (cb => {
-    maybeThrow()
-    maybeCallBackWithError(cb)
-})
+  maybeThrow();
+  maybeCallBackWithError(cb);
+});
 
 // this starts running the suite
-test()
+test();
 ```
 
 This will run the tests, outputting to the `outputStream`, and when done will
@@ -117,13 +116,13 @@ literal forms work as with just `test`.
 ```js
 test.only('only this test will run', function(){
     // ...
-})
+});
 ```
 
 ```js
 test.skip('all tests except this one will run', function(){
     // ...
-})
+});
 ```
 
 ### Timeouts
@@ -138,8 +137,8 @@ for a specific test:
 
 ```js
 test('this is a test with a 1 second timeout', () => {
-    // ...
-}, { timeout: 1000 })
+  // ...
+}, { timeout: 1000 });
 ```
 
 To completely disable timeouts, you can set a `timeout` property to `Infinity`.
@@ -162,9 +161,9 @@ You can add a layer of context to tests by using `test.context`:
 
 ```js
 test.context('MyClass', () => {
-    test('foo', () => { /* ... */ })
-    test('bar', () => { /* ... */ })
-})
+  test('foo', () => { /* ... */ });
+  test('bar', () => { /* ... */ });
+});
 ```
 
 You can do this up to an arbitrary depth.
@@ -192,7 +191,7 @@ Mocha.
 If you'd like these as globals, you can do something like this.
 
 ```js
-Object.assign(global, require('pitesti/bdd`))
+Object.assign(global, require('pitesti/bdd'));
 ```
 
 Note that Mocha's `this` object is not supported. Instead, to configure an
@@ -223,15 +222,15 @@ You'll have to set an `outputStream`, so if you're using one of the tools above,
 you should be able to do something like:
 
 ```js
-const pitesti = require('pitesti')
-const { Writable } = require('stream')
-const out = document.getElementById('test-output')
+const pitesti = require('pitesti');
+const { Writable } = require('stream');
+const out = document.getElementById('test-output');
 const outputStream = new Writable({
   write(chunk, encoding, cb) {
-    out.innerHTML += chunk
-    cb()
+    out.innerHTML += chunk;
+    cb();
   }
-})
+});
 const test = pitesti({ outputStream });
 ```
 
