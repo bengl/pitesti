@@ -156,7 +156,7 @@ There are two main suggested approaches to take:
 2. Use a tool like the [`node-tap` cli ](http://www.node-tap.org/cli/) to run
    all your test files as individual suites.
 
-### Grouping, Contexts, Subtests
+### Grouping, Contexts
 
 You can add a layer of context to tests by using `test.context`:
 
@@ -171,18 +171,6 @@ You can do this up to an arbitrary depth.
 
 You can change the separator used in the TAP output by using the
 `contextSeparator` option as defined above.
-
-You can also add TAP-standard unbuffered subtests:
-
-```js
-test.subtest('MyClass', () => {
-    test('foo', () => { /* ... */ })
-    test('bar', () => { /* ... */ })
-})
-```
-
-These will output as indented tests. Any tests contained within either contexts
-or subtests will count toward your test totals shown in the summary.
 
 ### Browser Usage
 
