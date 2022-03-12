@@ -18,42 +18,35 @@ ok 10 test 10
 
 `;
 
-module.exports = function (cb) {
-  const { test, context } = getTest({
-    expected: testOutput,
-    cb,
-    config: { summary: false, contextSeparator: ' : ' }
-  });
+const { test, context } = getTest({
+  expected: testOutput,
+  config: { summary: false, contextSeparator: ' : ' }
+});
 
-  test('test 1', () => {});
-  context('ctx1', () => {
-    test('test 2', () => {});
-    test`test 3`(() => {});
+test('test 1', () => {});
+context('ctx1', () => {
+  test('test 2', () => {});
+  test`test 3`(() => {});
+});
+context`ctx2`(() => {
+  test('test 4', () => {});
+  context`ctx3`(() => {
+    test('test 5', () => {});
   });
-  context`ctx2`(() => {
-    test('test 4', () => {});
-    context`ctx3`(() => {
-      test('test 5', () => {});
-    });
+});
+context`ctx4`(() => {
+  test('test 6', () => {});
+  context.skip`ctx5`(() => {
+    test('test 7', () => {});
   });
-  context`ctx4`(() => {
-    test('test 6', () => {});
-    context.skip`ctx5`(() => {
-      test('test 7', () => {});
-    });
+});
+context.skip('ctx6', () => {
+  test('test 8', () => {});
+  context`ctx7`(() => {
+    test('test 9', () => {});
   });
-  context.skip('ctx6', () => {
-    test('test 8', () => {});
-    context`ctx7`(() => {
-      test('test 9', () => {});
-    });
-  });
+});
 
-  test('test 10', () => {});
+test('test 10', () => {});
 
-  test();
-};
-
-if (require.main === module) {
-  module.exports(function () {});
-}
+test();

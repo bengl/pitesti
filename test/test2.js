@@ -17,22 +17,15 @@ ok 5 bar example 5 # SKIP
 # skip  4
 `;
 
-module.exports = function (cb) {
-  const test = getTest({
-    expected: testOutput,
-    cb
-  });
+const test = getTest({
+  expected: testOutput
+});
 
-  test.skip`bar example 1`(Promise.resolve());
-  test('bar example 2', Promise.resolve());
-  test.only('bar example 3', Promise.resolve());
-  test.only`bar example 4`(Promise.resolve());
-  test('bar example 5', Promise.resolve());
+test.skip`bar example 1`(Promise.resolve());
+test('bar example 2', Promise.resolve());
+test.only('bar example 3', Promise.resolve());
+test.only`bar example 4`(Promise.resolve());
+test('bar example 5', Promise.resolve());
 
-  console.log('#\n# test `only`\n#');
-  test();
-};
-
-if (require.main === module) {
-  module.exports(function () {});
-}
+console.log('#\n# test `only`\n#');
+test();

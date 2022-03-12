@@ -17,7 +17,7 @@ function getFakeStream () {
 
 function getTest ({
   expected,
-  cb,
+  cb = () => {},
   expectedCode = 0,
   config = {},
   defaults = false

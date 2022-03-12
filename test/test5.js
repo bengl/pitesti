@@ -16,35 +16,24 @@ not ok 3 bad time
   ...
 `;
 
-module.exports = function (cb) {
-  const oldPrepare = Error.prepareStackTrace;
-  Error.prepareStackTrace = () => 'Error\nfake stack';
+Error.prepareStackTrace = () => 'Error\nfake stack';
 
-  const test = getTest({
-    expected: testOutput,
-    config: { summary: false, timeout: 50 },
-    expectedCode: 1,
-    cb: () => {
-      Error.prepareStackTrace = oldPrepare;
-      cb();
-    }
-  });
+const test = getTest({
+  expected: testOutput,
+  config: { summary: false, timeout: 50 },
+  expectedCode: 1
+});
 
-  test('good time', function (cb) {
-    setTimeout(cb, 25);
-  });
+test('good time', function (cb) {
+  setTimeout(cb, 25);
+});
 
-  test('good time on own time', function (cb) {
-    setTimeout(cb, 50);
-  }, { timeout: 100 });
+test('good time on own time', function (cb) {
+  setTimeout(cb, 50);
+}, { timeout: 100 });
 
-  test('bad time', function (cb) {
-    setTimeout(cb, 75);
-  });
+test('bad time', function (cb) {
+  setTimeout(cb, 75);
+});
 
-  test();
-};
-
-if (require.main === module) {
-  module.exports(function () {});
-}
+test();

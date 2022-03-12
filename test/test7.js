@@ -15,18 +15,10 @@ async function runAndTest (file) {
   assert.strictEqual(expected.toString('utf8'), actual.stdout.toString('utf8'));
 }
 
-module.exports = cb => {
-  (async () => {
-    try {
-      await runAndTest('bdd-test1');
-      await runAndTest('bdd-test2');
-    } catch (e) {
-      console.log(e);
-      throw e;
-    }
-  })().then(cb, cb);
-};
-
-if (require.main === module) {
-  module.exports(function () {});
-}
+(async () => {
+  await runAndTest('bdd-test1');
+  await runAndTest('bdd-test2');
+})().catch(e => {
+  console.log(e);
+  process.exitCode = 1;
+});
